@@ -1,30 +1,40 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, flash, redirect
 from app import app
+from forms import RegistrationForm, LoginForm
 
-"""A one line summary of the module or program, terminated by a period.
+app.config['SECRET_KEY'] = 'd9ee7cf4cfc30af058b1dd9c649c0b82'
 
-check here for a guide to documentation https://github.com/google/styleguide/blob/gh-pages/pyguide.md#38-comments-and-docstrings
-Leave one blank line.  The rest of this docstring should contain an
-overall description of the module or program.  Optionally, it may also
-contain a brief description of exported classes and functions and/or usage
-examples.
-
-  Typical usage example:
-
-  foo = ClassFoo()
-  bar = foo.FunctionBar()
-"""
-# testing
-
-
-def func(x):
-    return x + 1
-
-
-def test_answer():
-    assert func(3) == 4
-
+#this would be called from the database
+posts = [
+    {
+        'author': 'Frannie Ziesemer',
+        'title': 'Blog Post 1',
+        'content': 'First post content....',
+        'date_posted': 'February 1, 2021'
+    },
+    {
+        'author': 'Jane Doe',
+        'title': 'Blog Post 2 ',
+        'content': 'Second Post content....',
+        'date_posted': 'February 2, 2021'
+    }
+]
 
 @app.route('/')
+@app.route('/home')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', posts=posts)
+
+@app.route('/about')
+def about():
+    return render_template('about.html', title='About')
+
+@app.route('/register')
+def register():
+    form = RegistrationForm()
+    return render_template('register.html', title='Register', form=form)
+
+@app.route('/login')
+def login():
+    form = LoginForm()
+    return render_template('login.html', title='Login', form=form)
